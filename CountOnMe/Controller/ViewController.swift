@@ -15,7 +15,7 @@ class ViewController: UIViewController {
     @IBOutlet var operatorButtons: [UIButton]!
     
     // MARK: - Properties
-    var manager = CountManager()
+    private var manager = CountManager()
     
     // MARK: - viewDidLoad
     override func viewDidLoad() {
@@ -27,7 +27,8 @@ class ViewController: UIViewController {
         guard let numberText = sender.title(for: .normal) else {
             return
         }
-        if manager.expressionHaveResult(text: textView.text) {
+        
+        if manager.expressionHasResult(text: textView.text) {
             textView.text = ""
         }
         textView.text.append(numberText)
@@ -39,7 +40,7 @@ class ViewController: UIViewController {
             return self.present(alertVC, animated: true, completion: nil)
         }
         
-        guard !manager.expressionHaveResult(text: textView.text) else {
+        guard !manager.expressionHasResult(text: textView.text) else {
             let alertVC = makeAlertVC(message: "Commencez avec un chiffre !")
             return self.present(alertVC, animated: true, completion: nil)
         }
@@ -57,12 +58,12 @@ class ViewController: UIViewController {
             return self.present(alertVC, animated: true, completion: nil)
         }
         
-        guard manager.expressionHaveEnoughElement(text: textView.text) else {
+        guard manager.expressionHasEnoughElement(text: textView.text) else {
             let alertVC = makeAlertVC(message: "Démarrez un nouveau calcul !")
             return self.present(alertVC, animated: true, completion: nil)
         }
         
-        guard !manager.expressionHaveResult(text: textView.text) else {
+        guard !manager.expressionHasResult(text: textView.text) else {
             let alertVC = makeAlertVC(message: "Résultat déjà obtenu !")
             return self.present(alertVC, animated: true, completion: nil)
         }
@@ -76,6 +77,4 @@ class ViewController: UIViewController {
         alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
         return alertVC
     }
-
 }
-

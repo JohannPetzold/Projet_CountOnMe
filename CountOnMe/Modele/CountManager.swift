@@ -8,10 +8,10 @@
 
 import Foundation
 
-class CountManager {
+struct CountManager {
 
     /* Isole les éléments du texte séparés par un espace */
-    func getElementsFromText(text: String) -> [String] {
+    private func getElementsFromText(text: String) -> [String] {
         return text.split(separator: " ").map { "\($0)" }
     }
     
@@ -22,7 +22,7 @@ class CountManager {
     }
     
     /* Vérifie que l'expression a bien 3 éléments ou plus */
-    func expressionHaveEnoughElement(text: String) -> Bool {
+    func expressionHasEnoughElement(text: String) -> Bool {
         return getElementsFromText(text: text).count >= 3
     }
     
@@ -33,7 +33,7 @@ class CountManager {
     }
     
     /* Vérifie si l'expression contient un signe = */
-    func expressionHaveResult(text: String) -> Bool {
+    func expressionHasResult(text: String) -> Bool {
         return text.firstIndex(of: "=") != nil
     }
     
@@ -41,12 +41,11 @@ class CountManager {
      À chaque calcul effectué, retire les 3 éléments le composant et ajoute le résultat à l'index 0 */
     func operationToReduce(text: String) -> [String]? {
         var operations = getElementsFromText(text: text)
-        if expressionHaveEnoughElement(text: text) && !expressionHaveResult(text: text) {
+        if expressionHasEnoughElement(text: text) && !expressionHasResult(text: text) {
             while operations.count > 1 {
                 let left = Int(operations[0])!
                 let operand = operations[1]
                 let right = Int(operations[2])!
-                
                 let result: Int
                 switch operand {
                 case "+": result = left + right
@@ -55,7 +54,6 @@ class CountManager {
                 case "÷": result = left / right
                 default: return nil
                 }
-                
                 operations = Array(operations.dropFirst(3))
                 operations.insert("\(result)", at: 0)
             }

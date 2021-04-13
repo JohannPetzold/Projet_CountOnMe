@@ -19,7 +19,7 @@ class ViewControllerTests: XCTestCase {
     }
     
     func testGivenTextViewIsBase_WhenUseTappedNumberButton_ThenTextViewBecomeButtonTitle() {
-        let _ = controller.view
+        _ = controller.view
         
         controller.tappedNumberButton(controller.numberButtons[1])
         
@@ -27,7 +27,7 @@ class ViewControllerTests: XCTestCase {
     }
     
     func testGivenTextViewAsNumber_WhenUseTappedNumberButton_ThenTextViewAddButtonTitleAtLast() {
-        let _ = controller.view
+        _ = controller.view
         controller.textView.text = "1"
         
         controller.tappedNumberButton(controller.numberButtons[1])
@@ -36,7 +36,7 @@ class ViewControllerTests: XCTestCase {
     }
     
     func testGivenTextView_WhenUseTappedNumberButtonWithNoTitle_ThenTextViewStaySame() {
-        let _ = controller.view
+        _ = controller.view
         let button = UIButton()
         controller.textView.text = ""
         
@@ -46,7 +46,7 @@ class ViewControllerTests: XCTestCase {
     }
     
     func testGivenTextViewAlreadyHasOperator_WhenUseTappedOperationButton_ThenTextViewStaySame() {
-        let _ = controller.view
+        _ = controller.view
         controller.textView.text = "1 +"
         
         controller.tappedOperationButton(controller.operatorButtons[0])
@@ -55,7 +55,7 @@ class ViewControllerTests: XCTestCase {
     }
     
     func testGivenTextViewAlreadyHasEqual_WhenUseTappedOperationButton_ThenTextViewStaySame() {
-        let _ = controller.view
+        _ = controller.view
         controller.textView.text = "1 + 1 = 2"
         
         controller.tappedOperationButton(controller.operatorButtons[2])
@@ -64,7 +64,7 @@ class ViewControllerTests: XCTestCase {
     }
     
     func testGivenOperatorButtonHasNoTitle_WhenUseTappedOperationButton_ThenNothingChange() {
-        let _ = controller.view
+        _ = controller.view
         controller.textView.text = "1 + 1"
         let button = UIButton()
         
@@ -74,7 +74,7 @@ class ViewControllerTests: XCTestCase {
     }
     
     func testGivenTextViewHasNoSign_WhenUseTappedOperationButton_ThenTextViewAppendButtonTitle() {
-        let _ = controller.view
+        _ = controller.view
         controller.textView.text = "10"
         
         controller.tappedOperationButton(controller.operatorButtons[0])
@@ -83,7 +83,7 @@ class ViewControllerTests: XCTestCase {
     }
     
     func testGivenTextViewHasCorrectExpression_WhenUseTappedEqualButton_ThenTextViewAppendResult() {
-        let _ = controller.view
+        _ = controller.view
         controller.textView.text = "23 - 10 × 5"
         
         controller.tappedEqualButton(UIButton())
@@ -92,7 +92,7 @@ class ViewControllerTests: XCTestCase {
     }
     
     func testGivenExpressionIsNotCorrect_WhenUseTappedEqualButton_ThenTextViewStaySame() {
-        let _ = controller.view
+        _ = controller.view
         controller.textView.text = "10 ÷"
         
         controller.tappedEqualButton(UIButton())
@@ -101,7 +101,7 @@ class ViewControllerTests: XCTestCase {
     }
     
     func testGivenExpressionHasNotEnoughElement_WhenUseTappedEqualButton_ThenTextViewStaySame() {
-        let _ = controller.view
+        _ = controller.view
         controller.textView.text = "1 1"
         
         controller.tappedEqualButton(UIButton())
@@ -110,7 +110,7 @@ class ViewControllerTests: XCTestCase {
     }
     
     func testGivenExpressionHasResult_WhenUseTappedEqualButton_ThenTextViewStaySame() {
-        let _ = controller.view
+        _ = controller.view
         controller.textView.text = "1 + 1 = 2"
         
         controller.tappedEqualButton(UIButton())
