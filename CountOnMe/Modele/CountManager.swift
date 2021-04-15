@@ -11,25 +11,33 @@ import Foundation
 struct CountManager {
 
     /* Isole les éléments du texte séparés par un espace */
-    private func getElementsFromText(text: String) -> [String] {
-        return text.split(separator: " ").map { "\($0)" }
+    func getElementsFromText(text: String) -> [String] {
+        let elements = text.split(separator: " ").map { "\($0)" }
+        for element in elements {
+            if !verifyElement(text: element) {
+                return [""]
+            }
+        }
+        return elements
+    }
+    
+    /* Vérifie si le texte est un nombre ou un signe */
+    private func verifyElement(text: String) -> Bool {
+        if text.isDigits || text.isOperationSign {
+            return true
+        }
+        return false
     }
     
     /* Vérifie que l'expression est correcte (ne se termine pas par un opérateur) */
-    func expressionIsCorrect(text: String) -> Bool {
+    func lastElementIsNotOperator(text: String) -> Bool {
         let elements = getElementsFromText(text: text)
-        return elements.last != "+" && elements.last != "-" && elements.last != "×" && elements.last != "÷"
+        return !elements.last!.isOperationSign
     }
     
     /* Vérifie que l'expression a bien 3 éléments ou plus */
     func expressionHasEnoughElement(text: String) -> Bool {
         return getElementsFromText(text: text).count >= 3
-    }
-    
-    /* Vérifie si le dernier élément n'est pas un opérateur */
-    func canAddOperator(text: String) -> Bool {
-        let elements = getElementsFromText(text: text)
-        return elements.last != "+" && elements.last != "-" && elements.last != "×" && elements.last != "÷"
     }
     
     /* Vérifie si l'expression contient un signe = */
@@ -38,28 +46,47 @@ struct CountManager {
     }
     
     /* Réalise les calculs en isolant les éléments composants chaque opération
-     À chaque calcul effectué, retire les 3 éléments le composant et ajoute le résultat à l'index 0 */
-    func operationToReduce(text: String) -> [String]? {
+     Priorise les multiplications et division */
+    func operationToReduce(text: String) -> String  {
         var operations = getElementsFromText(text: text)
-        if expressionHasEnoughElement(text: text) && !expressionHasResult(text: text) {
-            while operations.count > 1 {
-                let left = Int(operations[0])!
-                let operand = operations[1]
-                let right = Int(operations[2])!
-                let result: Int
-                switch operand {
-                case "+": result = left + right
-                case "-": result = left - right
-                case "×" : result = left * right
-                case "÷": result = left / right
-                default: return nil
+        while operations.count > 1 {
+            let index = operationsContainPriority(operations: operations)
+            let left = index != nil ? Int(operations[index! - 1])! : Int(operations[0])!
+            let operand = index != nil ? operations[index!] : operations[1]
+            let right = index != nil ? Int(operations[index! + 1])! : Int(operations[2])!
+            let result: Int
+            if operand.isDivide && (left == 0 || right == 0) {
+                return "error"
+            }
+            switch operand {
+            case "+": result = left + right
+            case "-": result = left - right
+            case "×" : result = left * right
+            case "÷": result = left / right
+            default: return ""
+            }
+            if index != nil {
+                for _ in 1...3 {
+                    operations.remove(at: index!-1)
                 }
+                operations.insert("\(result)", at: index!-1)
+            } else {
                 operations = Array(operations.dropFirst(3))
                 operations.insert("\(result)", at: 0)
             }
-        } else {
-            return nil
         }
-        return operations
+        return operations.first!
+    }
+    
+    /* Vérifie si l'expression contient une opération prioritaire et renvoi son index */
+    private func operationsContainPriority(operations: [String]) -> Int? {
+        for index in 0..<operations.count {
+            if index > 0 && index < operations.count {
+                if operations[index].isPriority && operations[index - 1].isDigits && operations[index + 1].isDigits {
+                    return index
+                }
+            }
+        }
+        return nil
     }
 }

@@ -21,50 +21,108 @@ class CountManagerTests: XCTestCase {
         let elements: [String] = manager.getElementsFromText(text: "1 + 1 = 2")
         
         XCTAssertNotNil(elements)
-        XCTAssertEqual(elements.first!, "1")
+        XCTAssertEqual(elements, ["1", "+", "1", "=", "2"])
     }
     
-    func testGivenTwoTypeOfText_WhenCallingExpressionIsCorrect_ThenReturnFalseIfCalcSignIsAtEnd() {
-        let firstText = manager.expressionIsCorrect(text: "1 + 1")
-        let secondText = manager.expressionIsCorrect(text: "1 +")
+    func testGivenSomeExpression_WhenGettingElements_ThenReturnArrayOfString() {
+        let elements: [String] = manager.getElementsFromText(text: "1+ + 1")
         
-        XCTAssertTrue(firstText)
-        XCTAssertFalse(secondText)
+        XCTAssertEqual(elements.first!, "")
+    }
+    
+    func testGivenSomeExpression2_WhenGettingElements_ThenReturnArrayOfString() {
+        let elements: [String] = manager.getElementsFromText(text: "abc + def = ghi")
+        
+        XCTAssertEqual(elements.first!, "")
+    }
+    
+    func testGivenExpression_WhenCheckingLastElement_ThenReturnTrueIfLastIsNotOperator() {
+        let expression = manager.lastElementIsNotOperator(text: "1 + 1")
+        
+        XCTAssertTrue(expression)
+    }
+    
+    func testGivenExpression_WhenCheckingLastElement_ThenReturnFalseIfLastIsOperator() {
+        let expression = manager.lastElementIsNotOperator(text: "1 +")
+        
+        XCTAssertFalse(expression)
+    }
+    
+    func testGivenBadExpression_WhenCheckingLastElement_ThenReturnTrue() {
+        let expression = manager.lastElementIsNotOperator(text: "abcd + 1")
+        
+        XCTAssertTrue(expression)
     }
 
-    func testGivenSomeTexts_WhenCountingElement_ThenShouldGetTrueWhenCountMoreOrEqualThan3() {
-        let firstText = manager.expressionHaveEnoughElement(text: "1 + 1")
-        let secondText = manager.expressionHaveEnoughElement(text: "1 +")
+    func testGivenExpressionWith3Elements_WhenCountingElements_ThenShouldGetTrue() {
+        let expression = manager.expressionHasEnoughElement(text: "1 + 1")
         
-        XCTAssertTrue(firstText)
-        XCTAssertFalse(secondText)
+        XCTAssertTrue(expression)
     }
     
-    func testGivenSomeExpression_WhenCheckingLastElement_ThenShouldGetTrueIfNoCalcSign() {
-        let firstText = manager.canAddOperator(text: "1 + 1")
-        let secondText = manager.canAddOperator(text: "1 +")
+    func testGivenExpressionWith2Elements_WhenCountingElements_ThenShouldGetFalse() {
+        let expression = manager.expressionHasEnoughElement(text: "1 +")
         
-        XCTAssertTrue(firstText)
-        XCTAssertFalse(secondText)
+        XCTAssertFalse(expression)
     }
     
-    func testGivenSomeExpressions_WhenCheckingIfContainsEqual_ThenReturnTrueIfSoAndFalseIfNot() {
-        let firstText = manager.expressionHaveResult(text: "1 + 1 = 3")
-        let secondText = manager.expressionHaveResult(text: "1 + 1")
+    func testGivenBadExpression_WhenCountingElements_ThenShouldGetFalse() {
+        let expression = manager.expressionHasEnoughElement(text: "abcd + bdef")
         
-        XCTAssertTrue(firstText)
-        XCTAssertFalse(secondText)
+        XCTAssertFalse(expression)
     }
     
-    func testGivenSomeExpressions_WhenCallingOperationToReduce_ThenGetResult() {
-        let firstText = manager.operationToReduce(text: "1 + 1")
-        let secondText = manager.operationToReduce(text: "1 +")
-        let thirdText = manager.operationToReduce(text: "1 + 1 - 2 × 3 ÷ 4")
-        let fourthText = manager.operationToReduce(text: "1 * 3")
+    func testGivenExpressionWith1Result_WhenCheckingIfHasResult_ThenReturnTrue() {
+        let expression = manager.expressionHasResult(text: "1 + 1 = 2")
         
-        XCTAssertEqual(firstText!.first, "2")
-        XCTAssertNil(secondText)
-        XCTAssertEqual(thirdText!.first, "0")
-        XCTAssertNil(fourthText)
+        XCTAssertTrue(expression)
+    }
+    
+    func testGivenExpressionWith2Result_WhenCheckingIfHasResult_ThenReturnTrue() {
+        let expression = manager.expressionHasResult(text: "1 + 1 = 2 =")
+        
+        XCTAssertTrue(expression)
+    }
+    
+    func testGivenBadExpression_WhenCheckingIfHasResult_ThenReturnTrue() {
+        let expression = manager.expressionHasResult(text: "abc + def = hij")
+        
+        XCTAssertTrue(expression)
+    }
+    
+    func testGivenAdditionExpression_WhenDoingCalculation_ThenShouldGetResult() {
+        let addition = manager.operationToReduce(text: "1 + 1")
+        
+        XCTAssertEqual(addition, "2")
+    }
+    
+    func testGivenAdditionAndMultiplicationExpression_WhenDoingCalculation_ThenShouldGetResult() {
+        let result = manager.operationToReduce(text: "1 + 2 × 2")
+        
+        XCTAssertEqual(result, "5")
+    }
+    
+    func testGivenMultipleOperation_WhenDoingCalculation_ThenShouldGetResult() {
+        let result = manager.operationToReduce(text: "1 + 3 × 5 ÷ 3 × 5 ÷ 4 - 6")
+        
+        XCTAssertEqual(result, "1")
+    }
+    
+    func testGivenBadExpression_WhenDoingCalculation_ThenShouldGetError() {
+        let expression = manager.operationToReduce(text: "abc + def")
+        
+        XCTAssertEqual(expression, "")
+    }
+    
+    func testGivenExpressionDivideBy0_WhenDoingCalculation_ThenShouldReturnError() {
+        let expression = manager.operationToReduce(text: "4 ÷ 0")
+        
+        XCTAssertEqual(expression, "error")
+    }
+    
+    func testGivenExpression0DivideBy0_WhenDoingCalculation_ThenShouldReturnError() {
+        let expression = manager.operationToReduce(text: "0 ÷ 0")
+        
+        XCTAssertEqual(expression, "error")
     }
 }

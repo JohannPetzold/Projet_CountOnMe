@@ -250,18 +250,29 @@
                                             </button>
                                         </subviews>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="ayK-xC-gk7">
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="ayK-xC-gk7">
                                         <rect key="frame" x="282" y="0.0" width="126" height="141"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qMj-Of-bCU">
-                                                <rect key="frame" x="0.0" y="0.0" width="126" height="141"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="126" height="63"/>
+                                                <color key="backgroundColor" red="0.57045853140000002" green="0.57047235969999999" blue="0.57046490910000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="42"/>
+                                                <state key="normal" title="A/C">
+                                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="tappedEraseButton:" destination="eqK-jh-KKu" eventType="touchUpInside" id="awx-rJ-fPZ"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ew0-JB-7Dd">
+                                                <rect key="frame" x="0.0" y="78" width="126" height="63"/>
                                                 <color key="backgroundColor" red="0.94643473759999996" green="0.64318747399999998" blue="0.12665354140000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="42"/>
                                                 <state key="normal" title="=">
                                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="tappedEqualButton:" destination="eqK-jh-KKu" eventType="touchUpInside" id="JgS-cl-T2a"/>
+                                                    <action selector="tappedEqualButton:" destination="eqK-jh-KKu" eventType="touchUpInside" id="bfL-OY-1o2"/>
                                                 </connections>
                                             </button>
                                         </subviews>

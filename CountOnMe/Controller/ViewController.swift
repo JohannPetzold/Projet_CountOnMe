@@ -35,7 +35,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func tappedOperationButton(_ sender: UIButton) {
-        guard manager.canAddOperator(text: textView.text) else {
+        guard manager.lastElementIsNotOperator(text: textView.text) else {
             let alertVC = makeAlertVC(message: "Un operateur est déja mis !")
             return self.present(alertVC, animated: true, completion: nil)
         }
@@ -53,7 +53,7 @@ class ViewController: UIViewController {
     }
 
     @IBAction func tappedEqualButton(_ sender: UIButton) {
-        guard manager.expressionIsCorrect(text: textView.text) else {
+        guard manager.lastElementIsNotOperator(text: textView.text) else {
             let alertVC = makeAlertVC(message: "Entrez une expression correcte !")
             return self.present(alertVC, animated: true, completion: nil)
         }
@@ -68,8 +68,13 @@ class ViewController: UIViewController {
             return self.present(alertVC, animated: true, completion: nil)
         }
         
-        textView.text.append(" = \(manager.operationToReduce(text: textView.text)!.first!)")
+        textView.text.append(" = \(manager.operationToReduce(text: textView.text))")
     }
+    
+    @IBAction func tappedEraseButton(_ sender: UIButton) {
+        textView.text = ""
+    }
+    
     
     // MARK: - Methods
     private func makeAlertVC(message: String) -> UIAlertController {
