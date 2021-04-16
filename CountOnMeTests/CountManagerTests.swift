@@ -17,6 +17,7 @@ class CountManagerTests: XCTestCase {
         manager = CountManager()
     }
     
+    // MARK: - getElementsFromText
     func testGivenTextViewContainText_WhenGettingElements_ThenReturnArrayOfString() {
         let elements: [String] = manager.getElementsFromText(text: "1 + 1 = 2")
         
@@ -36,6 +37,7 @@ class CountManagerTests: XCTestCase {
         XCTAssertEqual(elements.first!, "")
     }
     
+    // MARK: - lastElementIsNotOperator
     func testGivenExpression_WhenCheckingLastElement_ThenReturnTrueIfLastIsNotOperator() {
         let expression = manager.lastElementIsNotOperator(text: "1 + 1")
         
@@ -54,6 +56,7 @@ class CountManagerTests: XCTestCase {
         XCTAssertTrue(expression)
     }
 
+    // MARK: - expressionHasEnoughElement
     func testGivenExpressionWith3Elements_WhenCountingElements_ThenShouldGetTrue() {
         let expression = manager.expressionHasEnoughElement(text: "1 + 1")
         
@@ -72,6 +75,7 @@ class CountManagerTests: XCTestCase {
         XCTAssertFalse(expression)
     }
     
+    // MARK: - exoressionHasResult
     func testGivenExpressionWith1Result_WhenCheckingIfHasResult_ThenReturnTrue() {
         let expression = manager.expressionHasResult(text: "1 + 1 = 2")
         
@@ -90,6 +94,7 @@ class CountManagerTests: XCTestCase {
         XCTAssertTrue(expression)
     }
     
+    // MARK: - operationToReduce
     func testGivenAdditionExpression_WhenDoingCalculation_ThenShouldGetResult() {
         let addition = manager.operationToReduce(text: "1 + 1")
         

@@ -36,7 +36,7 @@ class ViewController: UIViewController {
     
     @IBAction func tappedOperationButton(_ sender: UIButton) {
         guard manager.lastElementIsNotOperator(text: textView.text) else {
-            let alertVC = makeAlertVC(message: "Un operateur est déja mis !")
+            let alertVC = makeAlertVC(message: "Un opérateur est déjà mis !")
             return self.present(alertVC, animated: true, completion: nil)
         }
         

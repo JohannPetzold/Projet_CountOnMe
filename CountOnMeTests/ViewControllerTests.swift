@@ -18,6 +18,7 @@ class ViewControllerTests: XCTestCase {
         controller = storyboard.instantiateInitialViewController() as? ViewController
     }
     
+    // MARK: - tappedNumberButton
     func testGivenTextViewIsEmpty_WhenUseTappedNumberButton_ThenTextViewBecomeButtonTitle() {
         _ = controller.view
         
@@ -45,6 +46,7 @@ class ViewControllerTests: XCTestCase {
         XCTAssertEqual(controller.textView.text, "")
     }
     
+    // MARK: - tappedOperationButton
     func testGivenTextViewAlreadyHasOperator_WhenUseTappedOperationButton_ThenTextViewStaySame() {
         _ = controller.view
         controller.textView.text = "1 +"
@@ -82,6 +84,7 @@ class ViewControllerTests: XCTestCase {
         XCTAssertEqual(controller.textView.text, "10 + ")
     }
     
+    // MARK: - tappedEqualButton
     func testGivenTextViewHasCorrectExpression_WhenUseTappedEqualButton_ThenTextViewAppendResult() {
         _ = controller.view
         controller.textView.text = "23 - 10 × 5"
@@ -118,6 +121,7 @@ class ViewControllerTests: XCTestCase {
         XCTAssertEqual(controller.textView.text, "1 + 1 = 2")
     }
     
+    // MARK: - tappedEraseButton
     func testGivenExpression_WhenUseTappedEraseButton_ThenTextViewBecomeEmpty() {
         _ = controller.view
         controller.textView.text = "1 + 3 + 5"
