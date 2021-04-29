@@ -24,50 +24,29 @@ class ViewController: UIViewController {
     
     // MARK: - Actions
     @IBAction func tappedNumberButton(_ sender: UIButton) {
-        guard let numberText = sender.title(for: .normal) else {
-            return
+        if let numberText = sender.title(for: .normal) {
+            if manager.expressionHasResult(text: textView.text) {
+                textView.text = ""
+            }
+            textView.text.append(numberText)
         }
-        
-        if manager.expressionHasResult(text: textView.text) {
-            textView.text = ""
-        }
-        textView.text.append(numberText)
     }
     
     @IBAction func tappedOperationButton(_ sender: UIButton) {
-        guard manager.lastElementIsNotOperator(text: textView.text) else {
-            let alertVC = makeAlertVC(message: "Un opérateur est déjà mis !")
+        if let error = manager.verifyOperationButton(text: textView.text) {
+            let alertVC = makeAlertVC(message: error)
             return self.present(alertVC, animated: true, completion: nil)
         }
-        
-        guard !manager.expressionHasResult(text: textView.text) else {
-            let alertVC = makeAlertVC(message: "Commencez avec un chiffre !")
-            return self.present(alertVC, animated: true, completion: nil)
+        if let sign = sender.title(for: .normal) {
+            textView.text.append(" " + sign + " ")
         }
-        
-        guard let sign = sender.title(for: .normal) else {
-            return
-        }
-        
-        textView.text.append(" " + sign + " ")
     }
 
     @IBAction func tappedEqualButton(_ sender: UIButton) {
-        guard manager.lastElementIsNotOperator(text: textView.text) else {
-            let alertVC = makeAlertVC(message: "Entrez une expression correcte !")
+        if let error = manager.verifyEqualButton(text: textView.text) {
+            let alertVC = makeAlertVC(message: error)
             return self.present(alertVC, animated: true, completion: nil)
         }
-        
-        guard manager.expressionHasEnoughElement(text: textView.text) else {
-            let alertVC = makeAlertVC(message: "Démarrez un nouveau calcul !")
-            return self.present(alertVC, animated: true, completion: nil)
-        }
-        
-        guard !manager.expressionHasResult(text: textView.text) else {
-            let alertVC = makeAlertVC(message: "Résultat déjà obtenu !")
-            return self.present(alertVC, animated: true, completion: nil)
-        }
-        
         textView.text.append(" = \(manager.operationToReduce(text: textView.text))")
     }
     

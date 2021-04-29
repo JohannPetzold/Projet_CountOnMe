@@ -75,7 +75,7 @@ class CountManagerTests: XCTestCase {
         XCTAssertFalse(expression)
     }
     
-    // MARK: - exoressionHasResult
+    // MARK: - expressionHasResult
     func testGivenExpressionWith1Result_WhenCheckingIfHasResult_ThenReturnTrue() {
         let expression = manager.expressionHasResult(text: "1 + 1 = 2")
         
@@ -129,5 +129,49 @@ class CountManagerTests: XCTestCase {
         let expression = manager.operationToReduce(text: "0 ÷ 0")
         
         XCTAssertEqual(expression, "error")
+    }
+    
+    // MARK: - verifyOperationButton
+    func testGivenExpressionHasOperator_WhenVerifyingOperationButton_ThenReturnErrorMessage() {
+        let error = manager.verifyOperationButton(text: "1 +")
+        
+        XCTAssertEqual(error, "Un opérateur est déjà mis !")
+    }
+    
+    func testGivenExpressionHasResult_WhenVerifyingOperationButton_ThenReturnErrorMessage() {
+        let error = manager.verifyOperationButton(text: "1 + 1 = 2")
+        
+        XCTAssertEqual(error, "Commencez avec un chiffre !")
+    }
+    
+    func testGivenExpressionHasNoOperator_WhenVerifyOperationButton_ThenReturnNil() {
+        let error = manager.verifyOperationButton(text: "1")
+        
+        XCTAssertNil(error)
+    }
+    
+    // MARK: - verifyEqualButton
+    func testGivenExpressionHasOperatorLast_WhenVerifyingEqualButton_ThenReturnError() {
+        let error = manager.verifyEqualButton(text: "1 +")
+        
+        XCTAssertEqual(error, "Entrez une expression correcte !")
+    }
+    
+    func testGivenExpressionHasEnoughElement_WhenVerifyingEqualButton_ThenReturnError() {
+        let error = manager.verifyEqualButton(text: "1 1")
+        
+        XCTAssertEqual(error, "Démarrez un nouveau calcul !")
+    }
+    
+    func testGivenExpressionHasResult_WhenVerifyingEqualButton_ThenReturnError() {
+        let error = manager.verifyEqualButton(text: "1 + 1 = 2")
+        
+        XCTAssertEqual(error, "Résultat déjà obtenu !")
+    }
+    
+    func testGivenExpressionIsCorrect_WhenVerifyingEqualButton_ThenReturnNil() {
+        let error = manager.verifyEqualButton(text: "1 + 1")
+        
+        XCTAssertNil(error)
     }
 }

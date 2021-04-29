@@ -19,7 +19,7 @@ extension String {
         return self == "+" || self == "-" || self == "×" || self == "÷" || self == "="
     }
     
-    var isPriority: Bool {
+    var isPrioritySign: Bool {
         guard !self.isEmpty else { return false }
         return self == "×" || self == "÷"
     }

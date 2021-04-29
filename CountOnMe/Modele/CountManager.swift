@@ -46,8 +46,8 @@ struct CountManager {
     }
     
     /* Réalise les calculs en isolant les éléments composants chaque opération
-     Priorise les multiplications et division */
-    func operationToReduce(text: String) -> String  {
+     Priorise les multiplications et divisions */
+    func operationToReduce(text: String) -> String {
         var operations = getElementsFromText(text: text)
         while operations.count > 1 {
             let index = operationsContainPriority(operations: operations)
@@ -82,10 +82,35 @@ struct CountManager {
     private func operationsContainPriority(operations: [String]) -> Int? {
         for index in 0..<operations.count {
             if index > 0 && index < operations.count {
-                if operations[index].isPriority && operations[index - 1].isDigits && operations[index + 1].isDigits {
+                if operations[index].isPrioritySign && operations[index - 1].isDigits && operations[index + 1].isDigits {
                     return index
                 }
             }
+        }
+        return nil
+    }
+    
+    /* Vérifie l'expression et renvoi un message d'erreur */
+    func verifyOperationButton(text: String) -> String? {
+        if !lastElementIsNotOperator(text: text) {
+            return "Un opérateur est déjà mis !"
+        }
+        if expressionHasResult(text: text) {
+           return "Commencez avec un chiffre !"
+        }
+        return nil
+    }
+    
+    /* Vérifie l'expression et renvoi un message d'erreur */
+    func verifyEqualButton(text: String) -> String? {
+        if !lastElementIsNotOperator(text: text) {
+            return "Entrez une expression correcte !"
+        }
+        if !expressionHasEnoughElement(text: text) {
+            return "Démarrez un nouveau calcul !"
+        }
+        if expressionHasResult(text: text) {
+            return "Résultat déjà obtenu !"
         }
         return nil
     }
