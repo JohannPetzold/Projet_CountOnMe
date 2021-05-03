@@ -156,4 +156,31 @@ class CountOnMeUITests: XCTestCase {
         
         XCTAssertEqual(result.value as! String, "10 ÷ 0 = error")
     }
+    
+    func testAddDecimalToNumber() throws {
+        app.buttons["1"].tap()
+        app.buttons["."].tap()
+        app.buttons["3"].tap()
+        
+        XCTAssertEqual(result.value as! String, "1.3")
+    }
+    
+    func testGetDecimalResult() throws {
+        app.buttons["1"].tap()
+        app.buttons["0"].tap()
+        app.buttons["÷"].tap()
+        app.buttons["4"].tap()
+        app.buttons["="].tap()
+        
+        XCTAssertEqual(result.value as! String, "10 ÷ 4 = 2.5")
+    }
+    
+    func testEmptyDecimal() throws {
+        app.buttons["A/C"].tap()
+        app.buttons["."].tap()
+        
+        XCTAssertEqual(result.value as! String, "")
+        XCTAssertTrue(app.alerts["Zéro!"].exists)
+        XCTAssertTrue(app.alerts["Zéro!"].staticTexts["Impossible d'ajouter une décimale !"].exists)
+    }
 }

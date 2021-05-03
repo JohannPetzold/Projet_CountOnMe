@@ -11,7 +11,7 @@ import Foundation
 extension String {
     var isDigits: Bool {
         guard !self.isEmpty else { return false }
-        return !self.contains { Int(String($0)) == nil }
+        return Double(self) != nil
     }
     
     var isOperationSign: Bool {
@@ -27,5 +27,20 @@ extension String {
     var isDivide: Bool {
         guard !self.isEmpty else { return false }
         return self == "÷"
+    }
+    
+    /* Case en Double puis vérifie si le nombre est entier */
+    func truncateDigit() -> String {
+        guard !self.isEmpty else { return self }
+        if let truncateResult = Double(self) {
+            let result = String(truncateResult)
+            let elements = result.split(separator: ".").map { "\($0)" }
+            if elements.count == 2 && elements.last! == "0" {
+                return elements.first!
+            } else {
+                return result
+            }
+        }
+        return self
     }
 }

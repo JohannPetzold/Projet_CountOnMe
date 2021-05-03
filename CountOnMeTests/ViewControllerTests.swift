@@ -46,6 +46,43 @@ class ViewControllerTests: XCTestCase {
         XCTAssertEqual(controller.textView.text, "")
     }
     
+    // MARK: - tappedDecimalButton
+    func testGivenTextViewIsEmpty_WhenTappedDecimalButton_ThenTextViewStaySame() {
+        _ = controller.view
+        controller.textView.text = ""
+        
+        controller.tappedDecimalButton(controller.decimalButton)
+        
+        XCTAssertEqual(controller.textView.text, "")
+    }
+    
+    func testGivenTextViewEndWithOperator_WhenTappedDecimalButton_ThenTextViewStaySame() {
+        _ = controller.view
+        controller.textView.text = "1 + "
+        
+        controller.tappedDecimalButton(controller.decimalButton)
+        
+        XCTAssertEqual(controller.textView.text, "1 + ")
+    }
+    
+    func testGivenTextViewEndWithNumber_WhenTappedDecimalButton_ThenNumberGetDecimal() {
+        _ = controller.view
+        controller.textView.text = "1"
+        
+        controller.tappedDecimalButton(controller.decimalButton)
+        
+        XCTAssertEqual(controller.textView.text, "1.")
+    }
+    
+    func testGivenTextViewNumberAlreadyGotDecimal_WhenTappedDecimalButton_ThenTextViewStaySame() {
+        _ = controller.view
+        controller.textView.text = "1.2"
+        
+        controller.tappedDecimalButton(controller.decimalButton)
+        
+        XCTAssertEqual(controller.textView.text, "1.2")
+    }
+    
     // MARK: - tappedOperationButton
     func testGivenTextViewAlreadyHasOperator_WhenUseTappedOperationButton_ThenTextViewStaySame() {
         _ = controller.view

@@ -13,6 +13,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var textView: UITextView!
     @IBOutlet var numberButtons: [UIButton]!
     @IBOutlet var operatorButtons: [UIButton]!
+    @IBOutlet weak var decimalButton: UIButton!
     
     // MARK: - Properties
     private var manager = CountManager()
@@ -25,29 +26,52 @@ class ViewController: UIViewController {
     // MARK: - Actions
     @IBAction func tappedNumberButton(_ sender: UIButton) {
         if let numberText = sender.title(for: .normal) {
-            if manager.expressionHasResult(text: textView.text) {
-                textView.text = ""
+            manager.verifyNumberButton(text: textView.text) { hasResult in
+                if hasResult {
+                    textView.text = ""
+                }
+                textView.text.append(numberText)
             }
-            textView.text.append(numberText)
+        }
+    }
+    
+    @IBAction func tappedDecimalButton(_ sender: UIButton) {
+        manager.verifyDecimalButton(text: textView.text) { error in
+            if error != nil {
+                let alertVC = makeAlertVC(message: error!)
+                return self.present(alertVC, animated: true, completion: nil)
+            } else {
+                if let decimal = sender.title(for: .normal) {
+                    textView.text.append(decimal)
+                }
+            }
         }
     }
     
     @IBAction func tappedOperationButton(_ sender: UIButton) {
-        if let error = manager.verifyOperationButton(text: textView.text) {
-            let alertVC = makeAlertVC(message: error)
-            return self.present(alertVC, animated: true, completion: nil)
-        }
-        if let sign = sender.title(for: .normal) {
-            textView.text.append(" " + sign + " ")
+        manager.verifyOperationButton(text: textView.text) { error in
+            if error != nil {
+                let alertVC = makeAlertVC(message: error!)
+                return self.present(alertVC, animated: true, completion: nil)
+            } else {
+                if let sign = sender.title(for: .normal) {
+                    textView.text.append(" " + sign + " ")
+                }
+            }
         }
     }
 
     @IBAction func tappedEqualButton(_ sender: UIButton) {
-        if let error = manager.verifyEqualButton(text: textView.text) {
-            let alertVC = makeAlertVC(message: error)
-            return self.present(alertVC, animated: true, completion: nil)
+        manager.verifyEqualButton(text: textView.text) { error in
+            if error != nil {
+                let alertVC = makeAlertVC(message: error!)
+                return self.present(alertVC, animated: true, completion: nil)
+            } else {
+                manager.operationToReduce(text: textView.text) { result in
+                    textView.text.append(" = " + result)
+                }
+            }
         }
-        textView.text.append(" = \(manager.operationToReduce(text: textView.text))")
     }
     
     @IBAction func tappedEraseButton(_ sender: UIButton) {
